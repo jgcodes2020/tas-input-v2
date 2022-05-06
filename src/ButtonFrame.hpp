@@ -2,6 +2,7 @@
 #define _BUTTON_FRAME_HPP_
 #include <gtkmm.h>
 #include <array>
+#include <vector>
 
 namespace tasdi2 {
   
@@ -32,6 +33,8 @@ namespace tasdi2 {
     };
   
     Gtk::Grid grid;
+    std::array<Gtk::Label, 1> spacers;
+    
     std::array<Gtk::ToggleButton, 14> buttons;
     Gtk::Label lbl_d;
     Gtk::Label lbl_c;

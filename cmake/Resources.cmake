@@ -7,7 +7,7 @@ function(compile_resource output source symbol namespace)
   if (IS_ABSOLUTE ${source})
     set(srcpath ${source})
   else()
-    set(srcpath "${CMAKE_CURRENT_SOURCE_DIR}/${source}")
+    set(srcpath "${PROJECT_SOURCE_DIR}/res/${source}")
   endif()
   
   add_custom_command(OUTPUT ${outpath}
