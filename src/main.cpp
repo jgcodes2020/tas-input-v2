@@ -1,12 +1,16 @@
 #include <cstdlib>
 #include <iostream>
 #include "gdkmm/display.h"
+#include "gdkmm/enums.h"
+#include "glibmm/refptr.h"
 #include "gtkmm/box.h"
 #include "gtkmm/builder.h"
 #include <sigc++/sigc++.h>
 #include <gtkmm.h>
 
 #include "gtkmm/cssprovider.h"
+#include "gtkmm/enums.h"
+#include "gtkmm/eventcontrollerkey.h"
 #include "gtkmm/stylecontext.h"
 #include <resources/ui/main.ui.rsrc.hpp>
 #include <resources/css/main.css.rsrc.hpp>
@@ -15,10 +19,13 @@ namespace tasdi2 {
   class MainWindow : public Gtk::Window {
   public:
     MainWindow() : builder(Gtk::Builder::create_from_string(tasdi2::rsrc::ui_data)) {
+      set_default_size(385, 475);
+      set_resizable(false);
       set_child(*builder->get_widget<Gtk::Box>("main-root"));
     };
   protected:
     Glib::RefPtr<Gtk::Builder> builder;
+    Glib::RefPtr<Gtk::EventControllerKey> kb_handler;
   };
 }
 
