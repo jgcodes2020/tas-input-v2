@@ -1,0 +1,282 @@
+<!-- 
+  This XML format should be compatible with UI builders as soon as they can 
+  handle GTK4. For now, it's all handcoded.
+-->
+<interface>
+  <object class="GtkAdjustment" id="spin-adj-x">
+    <property name="lower">-128</property>
+    <property name="upper">127</property>
+    <property name="step-increment">1</property>
+    <property name="value">0</property>
+  </object>
+  <object class="GtkAdjustment" id="spin-adj-y">
+    <property name="lower">-128</property>
+    <property name="upper">127</property>
+    <property name="step-increment">1</property>
+    <property name="value">0</property>
+  </object>
+
+  <object class="GtkBox" id="main-root">
+    <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+    <property name="homogeneous">true</property>
+
+    <!-- JOYSTICK FRAME -->
+    <child>
+      <object class="GtkFrame">
+        <property name="label">Joystick</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <property name="homogeneous">true</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
+            <!-- Draggable joystick -->
+            <child>
+              <object class="GtkAspectFrame">
+                <property name="ratio">1</property>
+
+                <child>
+                  <object class="GtkDrawingArea" id="jsfr-stick" />
+                </child>
+              </object>
+            </child>
+            <!-- Spinners for joystick -->
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <property name="spacing">2</property>
+                
+                <child>
+                  <object class="GtkFrame">
+                    <property name="label">X</property>
+                    <child>
+                      <object class="GtkSpinButton" id="jsfr-spin-x">
+                        <property name="margin-start">2</property>
+                        <property name="margin-end">2</property>
+                        <property name="margin-top">2</property>
+                        <property name="margin-bottom">2</property>
+                        <property name="adjustment">spin-adj-x</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkFrame">
+                    <property name="label">Y</property>
+                    
+                    <child>
+                      <object class="GtkSpinButton" id="jsfr-spin-y">
+                        <property name="margin-start">2</property>
+                        <property name="margin-end">2</property>
+                        <property name="margin-top">2</property>
+                        <property name="margin-bottom">2</property>
+                        <property name="adjustment">spin-adj-y</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <!-- BUTTON FRAME -->
+    <child>
+      <object class="GtkFrame">
+        <property name="label">Buttons</property>
+        <property name="margin-start">10</property>
+        <property name="margin-end">10</property>
+        <property name="margin-top">10</property>
+        <property name="margin-bottom">10</property>
+        <child>
+          <object class="GtkGrid" id="btfr-root">
+            <!-- Properties-->
+            <property name="column-homogeneous">true</property>
+            <property name="margin-start">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
+            <property name="name">btfr-root</property>
+
+            <!-- BUTTONS HERE -->
+
+            <!-- Triggers -->
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-l">
+                <property name="label">L</property>
+                <property name="margin-bottom">20</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                  <property name="column-span">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-z">
+                <property name="label">Z</property>
+                <property name="margin-bottom">20</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="row">0</property>
+                  <property name="column-span">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-r">
+                <property name="label">R</property>
+                <property name="margin-bottom">20</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="row">0</property>
+                  <property name="column-span">3</property>
+                </layout>
+              </object>
+            </child>
+
+            <!-- D-pad -->
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-dl">
+                <property name="label">&#x2B9C;</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-du">
+                <property name="label">&#x2B9D;</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-dr">
+                <property name="label">&#x2B9E;</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-dd">
+                <property name="label">&#x2B9F;</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">D</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+
+            <!-- Start button and spacer -->
+            <child>
+              <object class="GtkLabel">
+                <layout>
+                  <property name="column">3</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-start">
+                <property name="label">S</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+
+            <!-- C Buttons -->
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-cl">
+                <property name="label">&#x2B9C;</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-cu">
+                <property name="label">&#x2B9D;</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-cr">
+                <property name="label">&#x2B9E;</property>
+                <layout>
+                  <property name="column">8</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-cd">
+                <property name="label">&#x2B9F;</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">C</property>
+                <layout>
+                  <property name="column">7</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+
+            <!-- A and B -->
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-b">
+                <property name="label">B</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="btfr-btn-a">
+                <property name="label">A</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
