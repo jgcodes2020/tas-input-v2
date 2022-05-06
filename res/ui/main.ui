@@ -36,6 +36,8 @@
             <property name="margin-end">5</property>
             <property name="margin-top">5</property>
             <property name="margin-bottom">5</property>
+            <property name="spacing">5</property>
+            
             <!-- Draggable joystick -->
             <child>
               <object class="GtkAspectFrame">
