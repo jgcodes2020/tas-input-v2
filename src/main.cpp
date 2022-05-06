@@ -24,6 +24,7 @@ namespace tasdi2 {
     JoystickDrawHandler() :
       color_fg(0.0f, 0.0f, 0.0f),
       color_bg(1.0f, 1.0f, 1.0f),
+      color_bg2(0.5f, 0.5f, 0.5f),
       color_ln(0.0f, 0.0f, 1.0f),
       color_hd(1.0f, 0.0f, 0.0f) {}
 
@@ -32,7 +33,11 @@ namespace tasdi2 {
       const double width2  = width / 2.0;
       const double height2 = height / 2.0;
 
-      // background circle
+      // background
+      cairo->rectangle(0, 0, width, height);
+      set_color(cairo, color_bg2);
+      cairo->fill();
+      
       circle(cairo, width2, height2, width2);
       set_color(cairo, color_bg);
       cairo->fill();
@@ -66,6 +71,7 @@ namespace tasdi2 {
 
     Gdk::RGBA color_fg;
     Gdk::RGBA color_bg;
+    Gdk::RGBA color_bg2;
     Gdk::RGBA color_ln;
     Gdk::RGBA color_hd;
   };
