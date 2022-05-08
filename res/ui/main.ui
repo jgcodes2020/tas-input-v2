@@ -19,19 +19,20 @@
   <object class="GtkBox" id="main-root">
     <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
     <property name="homogeneous">true</property>
+    <property name="margin-start">10</property>
+    <property name="margin-end">10</property>
+    <property name="margin-top">10</property>
+    <property name="margin-bottom">10</property>
+    <property name="spacing">10</property>
+    
 
     <!-- JOYSTICK FRAME -->
     <child>
       <object class="GtkFrame">
         <property name="label">Joystick</property>
-        <property name="margin-start">10</property>
-        <property name="margin-end">10</property>
-        <property name="margin-top">10</property>
-        <property name="margin-bottom">10</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-            <property name="homogeneous">true</property>
             <property name="margin-start">5</property>
             <property name="margin-end">5</property>
             <property name="margin-top">5</property>
@@ -40,12 +41,11 @@
             
             <!-- Draggable joystick -->
             <child>
-              <object class="GtkAspectFrame">
+              <object class="GtkAspectFrame" id="jsfr-stick-ctn">
                 <property name="ratio">1</property>
-
-                <child>
-                  <object class="GtkDrawingArea" id="jsfr-stick" />
-                </child>
+                <property name="width-request">128</property>
+                <property name="height-request">128</property>
+                <property name="hexpand">true</property>
               </object>
             </child>
             <!-- Spinners for joystick -->
@@ -93,10 +93,6 @@
     <child>
       <object class="GtkFrame">
         <property name="label">Buttons</property>
-        <property name="margin-start">10</property>
-        <property name="margin-end">10</property>
-        <property name="margin-top">10</property>
-        <property name="margin-bottom">10</property>
         <child>
           <object class="GtkGrid" id="btfr-root">
             <!-- Properties-->

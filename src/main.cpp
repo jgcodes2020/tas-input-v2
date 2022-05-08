@@ -1,100 +1,48 @@
+#include <cairomm/cairomm.h>
+#include <glibmm.h>
 #include <gtkmm.h>
 #include <sigc++/sigc++.h>
 #include <cstdlib>
 #include <iostream>
 #include <numbers>
-#include "gdkmm/display.h"
 #include "gdkmm/enums.h"
-#include "gdkmm/rgba.h"
-#include "glibmm/refptr.h"
-#include "gtkmm/box.h"
-#include "gtkmm/builder.h"
-
-#include "gtkmm/cssprovider.h"
+#include "glibmm/binding.h"
+#include "glibmm/property.h"
+#include "gtkmm/aspectframe.h"
 #include "gtkmm/drawingarea.h"
-#include "gtkmm/enums.h"
 #include "gtkmm/eventcontrollerkey.h"
-#include "gtkmm/stylecontext.h"
+#include "gtkmm/eventcontrollermotion.h"
+#include "gtkmm/gesture.h"
+#include "gtkmm/gesturedrag.h"
+#include "joystick.hpp"
 #include <resources/css/main.css.rsrc.hpp>
 #include <resources/ui/main.ui.rsrc.hpp>
 
 namespace tasdi2 {
-  class JoystickDrawHandler {
-  public:
-    JoystickDrawHandler() :
-      color_fg(0.0f, 0.0f, 0.0f),
-      color_bg(1.0f, 1.0f, 1.0f),
-      color_bg2(0.5f, 0.5f, 0.5f),
-      color_ln(0.0f, 0.0f, 1.0f),
-      color_hd(1.0f, 0.0f, 0.0f) {}
 
-    void operator()(
-      const Cairo::RefPtr<Cairo::Context>& cairo, int width, int height) {
-      const double width2  = width / 2.0;
-      const double height2 = height / 2.0;
-
-      // background
-      cairo->rectangle(0, 0, width, height);
-      set_color(cairo, color_bg2);
-      cairo->fill();
-      
-      circle(cairo, width2, height2, width2);
-      set_color(cairo, color_bg);
-      cairo->fill();
-
-      // outline with axes
-      circle(cairo, width2, height2, width2);
-      line(cairo, width2, 0, width2, height);
-      line(cairo, 0, height2, width, height2);
-      set_color(cairo, color_fg);
-      cairo->stroke();
-    }
-
-  private:
-    static void set_color(
-      const Cairo::RefPtr<Cairo::Context>& cairo, const Gdk::RGBA& color) {
-      cairo->set_source_rgba(
-        color.get_red(), color.get_green(), color.get_blue(),
-        color.get_alpha());
-    }
-    static void circle(
-      const Cairo::RefPtr<Cairo::Context>& cairo, double cx, double cy,
-      double r) {
-      cairo->arc(cx, cy, r, 0, std::numbers::pi * 2);
-    }
-    static void line(
-      const Cairo::RefPtr<Cairo::Context>& cairo, double x1, double y1,
-      double x2, double y2) {
-      cairo->move_to(x1, y1);
-      cairo->line_to(x2, y2);
-    }
-
-    Gdk::RGBA color_fg;
-    Gdk::RGBA color_bg;
-    Gdk::RGBA color_bg2;
-    Gdk::RGBA color_ln;
-    Gdk::RGBA color_hd;
-  };
-
+  // MAIN WINDOW CLASS
+  // ======================
   class MainWindow : public Gtk::Window {
   public:
     MainWindow() :
-      builder(Gtk::Builder::create_from_string(tasdi2::rsrc::ui_data)) {
+      builder(Gtk::Builder::create_from_string(tasdi2::rsrc::ui_data)),
+      drag_hnd(Gtk::GestureDrag::create()) {
       // Setup UI
-      set_default_size(385, 475);
-      set_resizable(false);
       set_title("TASInput");
       set_child(*builder->get_widget<Gtk::Box>("main-root"));
-
-      // Setup drawing thing
-      Gtk::DrawingArea& jsfr_area =
-        *builder->get_widget<Gtk::DrawingArea>("jsfr-stick");
-      JoystickDrawHandler draw;
-      jsfr_area.set_draw_func(draw);
+      // Link joystick
+      auto& jsfr_stick_ctn =
+        *builder->get_widget<Gtk::AspectFrame>("jsfr-stick-ctn");
+      // Temporary fix until my SO question is answered:
+      // https://stackoverflow.com/questions/72157547/gtkmm-how-do-i-use-a-custom-widget-in-a-gtkbuilder-xml-file
+      jsfr_stick_ctn.set_child(stick);
     };
 
   protected:
     Glib::RefPtr<Gtk::Builder> builder;
+    Glib::RefPtr<Gtk::GestureDrag> drag_hnd;
+
+    tasdi2::Joystick stick;
   };
 }  // namespace tasdi2
 
@@ -108,6 +56,8 @@ int main(int argc, char* argv[]) {
 
     Gtk::StyleContext::add_provider_for_display(
       display, css_loader, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+    tasdi2::Joystick stick;
   });
   return app->make_window_and_run<tasdi2::MainWindow>(argc, argv);
 }

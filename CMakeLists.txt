@@ -20,7 +20,18 @@ add_executable(testapp
   "src/main.cpp"
   ${main.css}
   ${main.ui}
+  "src/joystick.cpp"
+  "src/joystick.hpp"
 )
 target_include_directories(testapp PRIVATE "${PROJECT_BINARY_DIR}/CMakeFiles/gen-include")
 target_link_libraries(testapp pc::gtkmm-4.0)
 target_compile_features(testapp PRIVATE cxx_std_20)
+
+add_executable(mve
+  "src/js-mve.cpp"
+  "src/joystick.cpp"
+  "src/joystick.hpp"
+)
+target_include_directories(mve PRIVATE "${PROJECT_BINARY_DIR}/CMakeFiles/gen-include")
+target_link_libraries(mve pc::gtkmm-4.0)
+target_compile_features(mve PRIVATE cxx_std_20)
