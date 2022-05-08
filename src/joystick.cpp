@@ -3,6 +3,9 @@
 #include <gtkmm.h>
 #include <iostream>
 #include <numbers>
+#include <algorithm>
+#include "gdkmm/general.h"
+#include "gtkmm/gesturedrag.h"
 
 namespace {
   inline void circle(
@@ -16,6 +19,11 @@ namespace {
     cairo->move_to(x1, y1);
     cairo->line_to(x2, y2);
   }
+  
+  template <class T>
+  inline T clamp(T x, T min, T max) {
+    return std::max(min, std::min(max, x));
+  }
 }  // namespace
 
 namespace tasdi2 {
@@ -23,11 +31,40 @@ namespace tasdi2 {
     Glib::ObjectBase("Tasdi2Joystick"),
     Gtk::Widget(),
     prop_xpos(*this, "xpos", 0),
-    prop_ypos(*this, "ypos", 0) {
-    set_hexpand();
-    set_hexpand_set();
-    set_vexpand();
-    set_vexpand_set();
+    prop_ypos(*this, "ypos", 0),
+    drag_gest(Gtk::GestureDrag::create()) {
+    // redraw when xpos or ypos changes
+    
+    slot_xpos = property_xpos().signal_changed().connect([&]() {
+      queue_draw();
+    });
+    slot_ypos = property_ypos().signal_changed().connect([&]() {
+      queue_draw();
+    });
+    
+    // mouse drag handler
+    this->add_controller(drag_gest);
+    drag_gest->signal_drag_begin().connect([&](double x, double y) {
+      drag_x = x;
+      drag_y = y;
+      
+      prop_xpos.set_value(clamp(int(drag_x * 256 / get_width()) - 128, -128, 127));
+      prop_ypos.set_value(clamp(int(drag_y * 256 / get_width()) - 128, -128, 127));
+    }, false);
+    drag_gest->signal_drag_update().connect([&](double dx, double dy) {
+      const double real_x = drag_x + dx;
+      const double real_y = drag_y + dy;
+      
+      prop_xpos.set_value(clamp(int(real_x * 256 / get_width()) - 128, -128, 127));
+      prop_ypos.set_value(clamp(int(real_y * 256 / get_width()) - 128, -128, 127));
+    }, false);
+    drag_gest->signal_drag_end().connect([&](double dx, double dy) {
+      const double real_x = drag_x + dx;
+      const double real_y = drag_y + dy;
+      
+      prop_xpos.set_value(clamp(int(real_x * 256 / get_width()) - 128, -128, 127));
+      prop_ypos.set_value(clamp(int(real_y * 256 / get_width()) - 128, -128, 127));
+    }, false);
   }
 
   void Joystick::measure_vfunc(
@@ -46,14 +83,15 @@ namespace tasdi2 {
   void Joystick::snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot>& snapshot) {
     const auto space = get_allocation();
     const Gdk::Rectangle rect(0, 0, space.get_width(), space.get_height());
-    std::cout << "Allocation area: " << space.get_x() << ", " << space.get_y() << ", " << space.get_width() << ", " << space.get_height() << "\n";
 
     auto cairo = snapshot->append_cairo(rect);
-
+    // special points
     const double w  = space.get_width();
     const double h  = space.get_height();
     const double cx = w / 2;
     const double cy = h / 2;
+    const double jx = (prop_xpos.get_value() + 128) * w / 256;
+    const double jy = (prop_ypos.get_value() + 128) * w / 256;
     // colors
     const Gdk::RGBA color_bg0("#7F7F7F");
     const Gdk::RGBA color_bg1("#FFFFFF");
@@ -71,7 +109,17 @@ namespace tasdi2 {
 
     line(cairo, cx, 0, cx, h);
     line(cairo, 0, cy, w, cy);
+    cairo->set_line_width(1);
     Gdk::Cairo::set_source_rgba(cairo, color_oln);
     cairo->stroke();
+
+    line(cairo, cx, cy, jx, jy);
+    cairo->set_line_width(3);
+    Gdk::Cairo::set_source_rgba(cairo, color_cln);
+    cairo->stroke();
+
+    circle(cairo, jx, jy, 5);
+    Gdk::Cairo::set_source_rgba(cairo, color_dot);
+    cairo->fill();
   }
 }  // namespace tasdi2

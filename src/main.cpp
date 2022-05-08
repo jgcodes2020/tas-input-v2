@@ -14,6 +14,7 @@
 #include "gtkmm/eventcontrollermotion.h"
 #include "gtkmm/gesture.h"
 #include "gtkmm/gesturedrag.h"
+#include "gtkmm/spinbutton.h"
 #include "joystick.hpp"
 #include <resources/css/main.css.rsrc.hpp>
 #include <resources/ui/main.ui.rsrc.hpp>
@@ -30,17 +31,29 @@ namespace tasdi2 {
       // Setup UI
       set_title("TASInput");
       set_child(*builder->get_widget<Gtk::Box>("main-root"));
-      // Link joystick
+      // Add joystick
       auto& jsfr_stick_ctn =
         *builder->get_widget<Gtk::AspectFrame>("jsfr-stick-ctn");
       // Temporary fix until my SO question is answered:
       // https://stackoverflow.com/questions/72157547/gtkmm-how-do-i-use-a-custom-widget-in-a-gtkbuilder-xml-file
       jsfr_stick_ctn.set_child(stick);
+
+      // link joystick with spinners
+      auto& jsfr_spin_x = *builder->get_widget<Gtk::SpinButton>("jsfr-spin-x");
+      auto& jsfr_spin_y = *builder->get_widget<Gtk::SpinButton>("jsfr-spin-y");
+
+      Glib::Binding::bind_property(
+        stick.property_xpos(), jsfr_spin_x.property_value(),
+        Glib::Binding::Flags::BIDIRECTIONAL);
+      Glib::Binding::bind_property(
+        stick.property_ypos(), jsfr_spin_y.property_value(),
+        Glib::Binding::Flags::BIDIRECTIONAL);
+      
     };
 
   protected:
     tasdi2::Joystick stick;
-  
+
     Glib::RefPtr<Gtk::Builder> builder;
     Glib::RefPtr<Gtk::GestureDrag> drag_hnd;
   };

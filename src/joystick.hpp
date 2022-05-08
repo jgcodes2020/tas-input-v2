@@ -1,6 +1,8 @@
 #ifndef _TASDI2_JOYSTICK_HPP_
 #define _TASDI2_JOYSTICK_HPP_
 #include <gtkmm.h>
+#include "glibmm/refptr.h"
+#include "gtkmm/gesturedrag.h"
 
 namespace tasdi2 {
   class Joystick : public Gtk::Widget {
@@ -38,6 +40,13 @@ namespace tasdi2 {
   private:
     Glib::Property<int> prop_xpos;
     Glib::Property<int> prop_ypos;
+    
+    sigc::connection slot_xpos;
+    sigc::connection slot_ypos;
+    
+    Glib::RefPtr<Gtk::GestureDrag> drag_gest;
+    int drag_x;
+    int drag_y;
   };
 }  // namespace tasdi2
 #endif
