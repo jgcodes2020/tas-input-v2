@@ -9,6 +9,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
+# Make sure they're not dumb.
+include(PlatformChecks)
+
 include(PkgConfigTargets)
 pc_find_package(gtkmm-4.0)
 
