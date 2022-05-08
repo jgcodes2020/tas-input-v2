@@ -24,7 +24,7 @@
     <property name="margin-top">10</property>
     <property name="margin-bottom">10</property>
     <property name="spacing">10</property>
-    
+
 
     <!-- JOYSTICK FRAME -->
     <child>
@@ -38,7 +38,7 @@
             <property name="margin-top">5</property>
             <property name="margin-bottom">5</property>
             <property name="spacing">5</property>
-            
+
             <!-- Draggable joystick -->
             <child>
               <object class="GtkAspectFrame" id="jsfr-stick-ctn">
@@ -47,13 +47,18 @@
                 <property name="height-request">128</property>
                 <property name="hexpand">true</property>
               </object>
+              <!--
+                Tasdi2Joystick object is supposed to be here,
+                but it doesn't work. Waiting on this SO question.
+                https://stackoverflow.com/questions/72157547/gtkmm-how-do-i-use-a-custom-widget-in-a-gtkbuilder-xml-file
+              -->
             </child>
             <!-- Spinners for joystick -->
             <child>
               <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                 <property name="spacing">2</property>
-                
+
                 <child>
                   <object class="GtkFrame">
                     <property name="label">X</property>
@@ -71,7 +76,7 @@
                 <child>
                   <object class="GtkFrame">
                     <property name="label">Y</property>
-                    
+
                     <child>
                       <object class="GtkSpinButton" id="jsfr-spin-y">
                         <property name="margin-start">2</property>

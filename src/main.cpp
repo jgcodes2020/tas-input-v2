@@ -39,10 +39,10 @@ namespace tasdi2 {
     };
 
   protected:
+    tasdi2::Joystick stick;
+  
     Glib::RefPtr<Gtk::Builder> builder;
     Glib::RefPtr<Gtk::GestureDrag> drag_hnd;
-
-    tasdi2::Joystick stick;
   };
 }  // namespace tasdi2
 
@@ -56,8 +56,6 @@ int main(int argc, char* argv[]) {
 
     Gtk::StyleContext::add_provider_for_display(
       display, css_loader, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-    tasdi2::Joystick stick;
   });
   return app->make_window_and_run<tasdi2::MainWindow>(argc, argv);
 }
