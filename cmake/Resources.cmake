@@ -4,6 +4,10 @@ function(compile_resource output source symbol namespace)
   set("${output}" "${PROJECT_BINARY_DIR}/CMakeFiles/gen-include/resources/${source}.rsrc.hpp" PARENT_SCOPE)
   set(outpath "${PROJECT_BINARY_DIR}/CMakeFiles/gen-include/resources/${source}.rsrc.hpp")
   
+  # Generate the output dir if it doesn't exit
+  get_filename_component(outdir "${outpath}" DIRECTORY)
+  file(MAKE_DIRECTORY ${outdir})
+  
   if (IS_ABSOLUTE ${source})
     set(srcpath ${source})
   else()
