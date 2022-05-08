@@ -13,7 +13,7 @@ Try running `pacman -Ss ${name}` (without the backticks, of course) to \
 find a package for `${name}`, then run `pacman -S <name>` to install it.
 ")
     else()
-      message(FATAL_ERROR "CMake couldn't find the package `${name}`.
+      message(FATAL_ERROR "CMake couldn't find the package `${name}`. \
 Please install the package for `${name}` first. (I assume that you know \
 how to do that.)")
     endif()
