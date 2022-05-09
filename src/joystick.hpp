@@ -1,13 +1,14 @@
 #ifndef _TASDI2_JOYSTICK_HPP_
 #define _TASDI2_JOYSTICK_HPP_
 #include <gtkmm.h>
-#include "glibmm/refptr.h"
-#include "gtkmm/gesturedrag.h"
 
 namespace tasdi2 {
   class Joystick : public Gtk::Widget {
   public:
+    // Default constructor.
     Joystick();
+    // Constructor used by GtkBuilder.
+    Joystick(BaseObjectType* c_obj, const Glib::RefPtr<Gtk::Builder> builder);
     virtual ~Joystick() {}
 
     virtual Gtk::SizeRequestMode get_request_mode_vfunc() const override {
@@ -23,8 +24,6 @@ namespace tasdi2 {
     
     void snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot> &snapshot) override;
     
-    
-    
     Glib::PropertyProxy<int> property_xpos() {
       return prop_xpos.get_proxy();
     }
@@ -38,6 +37,9 @@ namespace tasdi2 {
       return prop_ypos.get_proxy();
     }
   private:
+    // Performs initialization common to all constructors.
+    void common_init();
+  
     Glib::Property<int> prop_xpos;
     Glib::Property<int> prop_ypos;
     

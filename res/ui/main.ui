@@ -41,17 +41,16 @@
 
             <!-- Draggable joystick -->
             <child>
-              <object class="GtkAspectFrame" id="jsfr-stick-ctn">
+              <object class="GtkAspectFrame">
                 <property name="ratio">1</property>
                 <property name="width-request">128</property>
                 <property name="height-request">128</property>
                 <property name="hexpand">true</property>
+                
+                <child>
+                  <object class="gtkmm__CustomObject_Tasdi2Joystick" id="jsfr-stick"/>
+                </child>
               </object>
-              <!--
-                Tasdi2Joystick object is supposed to be here,
-                but it doesn't work. Waiting on this SO question.
-                https://stackoverflow.com/questions/72157547/gtkmm-how-do-i-use-a-custom-widget-in-a-gtkbuilder-xml-file
-              -->
             </child>
             <!-- Spinners for joystick -->
             <child>
@@ -99,7 +98,7 @@
       <object class="GtkFrame">
         <property name="label">Buttons</property>
         <child>
-          <object class="GtkGrid" id="btfr-root">
+          <object class="GtkGrid">
             <!-- Properties-->
             <property name="column-homogeneous">true</property>
             <property name="margin-start">5</property>

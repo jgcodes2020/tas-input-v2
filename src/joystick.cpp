@@ -33,8 +33,20 @@ namespace tasdi2 {
     prop_xpos(*this, "xpos", 0),
     prop_ypos(*this, "ypos", 0),
     drag_gest(Gtk::GestureDrag::create()) {
+    common_init();
+  }
+  
+  Joystick::Joystick(BaseObjectType* c_obj, const Glib::RefPtr<Gtk::Builder> builder) :
+    Glib::ObjectBase("Tasdi2Joystick"),
+    Gtk::Widget(c_obj),
+    prop_xpos(*this, "xpos", 0),
+    prop_ypos(*this, "ypos", 0),
+    drag_gest(Gtk::GestureDrag::create()) {
+    common_init();
+  }
+  
+  void Joystick::common_init() {
     // redraw when xpos or ypos changes
-    
     slot_xpos = property_xpos().signal_changed().connect([&]() {
       queue_draw();
     });

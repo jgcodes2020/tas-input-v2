@@ -31,36 +31,33 @@ namespace tasdi2 {
       // Setup UI
       set_title("TASInput");
       set_child(*builder->get_widget<Gtk::Box>("main-root"));
-      // Add joystick
-      auto& jsfr_stick_ctn =
-        *builder->get_widget<Gtk::AspectFrame>("jsfr-stick-ctn");
-      // Temporary fix until my SO question is answered:
-      // https://stackoverflow.com/questions/72157547/gtkmm-how-do-i-use-a-custom-widget-in-a-gtkbuilder-xml-file
-      jsfr_stick_ctn.set_child(stick);
-
+      set_resizable(false);
+      
       // link joystick with spinners
+      auto& jsfr_stick = *Gtk::Builder::get_widget_derived<tasdi2::Joystick>(builder, "jsfr-stick");
       auto& jsfr_spin_x = *builder->get_widget<Gtk::SpinButton>("jsfr-spin-x");
       auto& jsfr_spin_y = *builder->get_widget<Gtk::SpinButton>("jsfr-spin-y");
 
       Glib::Binding::bind_property(
-        stick.property_xpos(), jsfr_spin_x.property_value(),
+        jsfr_stick.property_xpos(), jsfr_spin_x.property_value(),
         Glib::Binding::Flags::BIDIRECTIONAL);
       Glib::Binding::bind_property(
-        stick.property_ypos(), jsfr_spin_y.property_value(),
+        jsfr_stick.property_ypos(), jsfr_spin_y.property_value(),
         Glib::Binding::Flags::BIDIRECTIONAL);
-      
     };
 
   protected:
-    tasdi2::Joystick stick;
-
     Glib::RefPtr<Gtk::Builder> builder;
     Glib::RefPtr<Gtk::GestureDrag> drag_hnd;
   };
 }  // namespace tasdi2
 
 int main(int argc, char* argv[]) {
-  auto app = Gtk::Application::create("io.github.jgcodes2020.testapp");
+  auto app = Gtk::Application::create("io.github.jgcodes2020.tasinput2");
+  
+  // Register tasdi2::Joystick to the GObject type system
+  { tasdi2::Joystick(); }
+  
   app->signal_startup().connect([]() {
     auto css_loader = Gtk::CssProvider::create();
     css_loader->load_from_data(tasdi2::rsrc::css_data);
