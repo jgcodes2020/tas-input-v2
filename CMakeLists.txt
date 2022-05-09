@@ -11,6 +11,7 @@ list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Make sure they're not dumb.
 include(PlatformChecks)
+include(M64PApi)
 
 include(PkgConfigTargets)
 pc_find_package(gtkmm-4.0)
