@@ -42,6 +42,8 @@ namespace tasdi2 {
       queue_draw();
     });
     
+    set_cursor("pointer");
+    
     // mouse drag handler
     this->add_controller(drag_gest);
     drag_gest->signal_drag_begin().connect([&](double x, double y) {
@@ -50,6 +52,8 @@ namespace tasdi2 {
       
       prop_xpos.set_value(clamp(int(drag_x * 256 / get_width()) - 128, -128, 127));
       prop_ypos.set_value(clamp(int(drag_y * 256 / get_width()) - 128, -128, 127));
+      
+      set_cursor("closedhand");
     }, false);
     drag_gest->signal_drag_update().connect([&](double dx, double dy) {
       const double real_x = drag_x + dx;
@@ -64,6 +68,7 @@ namespace tasdi2 {
       
       prop_xpos.set_value(clamp(int(real_x * 256 / get_width()) - 128, -128, 127));
       prop_ypos.set_value(clamp(int(real_y * 256 / get_width()) - 128, -128, 127));
+      set_cursor("pointer");
     }, false);
   }
 
