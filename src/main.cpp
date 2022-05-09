@@ -26,8 +26,7 @@ namespace tasdi2 {
   class MainWindow : public Gtk::Window {
   public:
     MainWindow() :
-      builder(Gtk::Builder::create_from_string(tasdi2::rsrc::ui_data)),
-      drag_hnd(Gtk::GestureDrag::create()) {
+      builder(Gtk::Builder::create_from_string(tasdi2::rsrc::ui_data)){
       // Setup UI
       set_title("TASInput");
       set_child(*builder->get_widget<Gtk::Box>("main-root"));
@@ -48,7 +47,6 @@ namespace tasdi2 {
 
   protected:
     Glib::RefPtr<Gtk::Builder> builder;
-    Glib::RefPtr<Gtk::GestureDrag> drag_hnd;
   };
 }  // namespace tasdi2
 

@@ -3,8 +3,6 @@
 extern "C" {
 EXPORT void ControllerCommand(int idx, unsigned char* command);
 EXPORT void GetKeys(int idx, BUTTONS* out);
-EXPORT void InitiateControllers(CONTROL_INFO info);
-EXPORT void ReadController(int idx, unsigned char* command);
 EXPORT int RomOpen();
 EXPORT void RomClosed();
 
