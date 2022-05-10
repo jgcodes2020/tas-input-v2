@@ -23,13 +23,19 @@ compile_resource(main.css "css/main.css" "css_data" "tasdi2::rsrc")
 compile_resource(main.ui "ui/main.ui" "ui_data" "tasdi2::rsrc")
 
 # UI test executable
-add_executable(testui
-  "src/main.cpp"
-  ${main.css}
-  ${main.ui}
+
+# UI test executable
+add_library(tasdi2 SHARED
+  "src/plugin.cpp"
+  "src/plugin.hpp"
   "src/joystick.cpp"
   "src/joystick.hpp"
+  "src/main_window.cpp"
+  "src/main_window.hpp"
+  ${main.css}
+  ${main.ui}
+  "src/mupen_api.hpp"
 )
-target_include_directories(testui PRIVATE "${PROJECT_BINARY_DIR}/CMakeFiles/gen-include")
-target_link_libraries(testui pc::gtkmm-4.0)
-target_compile_features(testui PRIVATE cxx_std_20)
+target_include_directories(tasdi2 PRIVATE "${PROJECT_BINARY_DIR}/CMakeFiles/gen-include")
+target_link_libraries(tasdi2 PRIVATE pc::gtkmm-4.0)
+target_compile_features(tasdi2 PRIVATE cxx_std_20)

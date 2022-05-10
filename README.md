@@ -1,6 +1,8 @@
-# TASInput v2
+# TASInput2
 
 This project is a Mupen64Plus input plugin that provides a GUI for precise joystick and button input.
+
+While the UI is heavily inspired by the original TASInput, this project shares no code with it.
 
 ## Building instructions
 ### Linux
