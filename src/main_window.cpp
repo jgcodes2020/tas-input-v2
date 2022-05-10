@@ -1,4 +1,5 @@
 #include "main_window.hpp"
+#include "gtkmm/button.h"
 #include "joystick.hpp"
 
 #include <cairomm/cairomm.h>
@@ -9,6 +10,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <numbers>
+#include "mupen64plus/m64p_plugin.h"
 #include <resources/css/main.css.rsrc.hpp>
 #include <resources/ui/main.ui.rsrc.hpp>
 
@@ -35,8 +37,50 @@ namespace tasdi2 {
       jsfr_stick.property_ypos(), jsfr_spin_y.property_value(),
       Glib::Binding::Flags::BIDIRECTIONAL);
   };
-}  // namespace tasdi2
 
+  BUTTONS MainWindow::retrieve_input(int idx) {
+    BUTTONS res;
+    res.L_TRIG =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-l")->get_active();
+    res.Z_TRIG =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-z")->get_active();
+    res.R_TRIG =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-r")->get_active();
+
+    res.U_DPAD =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-du")->get_active();
+    res.D_DPAD =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-dd")->get_active();
+    res.L_DPAD =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-dl")->get_active();
+    res.R_DPAD =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-dr")->get_active();
+
+    res.U_CBUTTON =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-cu")->get_active();
+    res.D_CBUTTON =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-cd")->get_active();
+    res.L_CBUTTON =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-cl")->get_active();
+    res.R_CBUTTON =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-cr")->get_active();
+
+    res.A_BUTTON =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-a")->get_active();
+    res.B_BUTTON =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-b")->get_active();
+    res.START_BUTTON =
+      builder->get_widget<Gtk::ToggleButton>("btfr-btn-start")->get_active();
+    
+    auto& jsfr_stick = *Gtk::Builder::get_widget_derived<tasdi2::Joystick>(
+      builder, "jsfr-stick");
+    
+    res.X_AXIS = jsfr_stick.property_xpos().get_value();
+    res.Y_AXIS = jsfr_stick.property_ypos().get_value();
+    
+    return res;
+  }
+}  // namespace tasdi2
 
 // OLD MAIN FUNCTION
 /*
