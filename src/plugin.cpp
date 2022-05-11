@@ -84,6 +84,38 @@ M64P_EXPORT m64p_error PluginGetVersion(
   return M64ERR_SUCCESS;
 }
 
+M64P_EXPORT int RomOpen() {
+  // Init GTK window
+  gtk_thread = std::thread(
+    []() { gtk_app->make_window_and_run<tasdi2::MainWindow>(0, nullptr); });
+  return true;
+}
+M64P_EXPORT void InitiateControllers(CONTROL_INFO info) {
+  info.Controls[0].Present = true;
+  info.Controls[0].Plugin = PLUGIN_NONE;
+}
+M64P_EXPORT void GetKeys(int idx, BUTTONS* out) {
+  using namespace std::literals;
+  
+  if (idx != 0) {
+    tasdi2::debug_log(
+      M64MSG_ERROR, "This plugin is still in the works: it only supports P1.");
+    tasdi2::debug_log(M64MSG_ERROR, "Commencing self-destruction protocol...");
+    std::abort();
+  }
+  std::atomic<uint32_t> buttons = 0;
+  std::atomic<bool> buttons_set = false;
+  // Grab button inputs
+  Glib::signal_idle().connect(
+    [&]() {
+      buttons = get_main_window<tasdi2::MainWindow>().retrieve_input(0).Value;
+      buttons_set = true;
+      buttons_set.notify_one();
+      return false;
+    }, Glib::PRIORITY_HIGH_IDLE);
+  buttons_set.wait(false);
+  out->Value = buttons;
+}
 M64P_EXPORT void ControllerCommand(int idx, unsigned char* cmd) {
   // This function can be used to interact with controller addons.
   // SM64 doesn't use any of them, so we should be fine for testing.
@@ -92,35 +124,6 @@ M64P_EXPORT void ControllerCommand(int idx, unsigned char* cmd) {
 M64P_EXPORT void ReadController(int idx, unsigned char* cmd) {
   // This function is currently useless, but M64+ leaves it here for later.
   (void) 0;
-}
-
-M64P_EXPORT void InitiateControllers(CONTROL_INFO info) {
-  info.Controls[0].Present = true;
-  info.Controls[0].Plugin = PLUGIN_NONE;
-}
-M64P_EXPORT void GetKeys(int idx, BUTTONS* out) {
-  if (idx != 0) {
-    tasdi2::debug_log(
-      M64MSG_ERROR, "This plugin is still in the works: it only supports P1.");
-    tasdi2::debug_log(M64MSG_ERROR, "Commencing self-destruction protocol...");
-    std::abort();
-  }
-  std::atomic<uint32_t> buttons = 0;
-  // Grab button inputs
-  Glib::signal_idle().connect(
-    [&]() {
-      buttons = get_main_window<tasdi2::MainWindow>().retrieve_input(0).Value;
-      return false;
-    },
-    Glib::PRIORITY_HIGH_IDLE);
-  buttons.wait(0);
-  out->Value = buttons;
-}
-M64P_EXPORT int RomOpen() {
-  // Init GTK window
-  gtk_thread = std::thread(
-    []() { gtk_app->make_window_and_run<tasdi2::MainWindow>(0, nullptr); });
-  return true;
 }
 M64P_EXPORT void RomClosed() {
   get_main_window<tasdi2::MainWindow>().close();
