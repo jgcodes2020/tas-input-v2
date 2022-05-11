@@ -4,6 +4,7 @@
 #include <gtkmm.h>
 #include <glibmm.h>
 
+#include "gtkmm/headerbar.h"
 #include "mupen_api.hpp"
 
 namespace tasdi2 {
@@ -14,6 +15,7 @@ namespace tasdi2 {
     BUTTONS retrieve_input(int idx);
   protected:
     Glib::RefPtr<Gtk::Builder> builder;
+    Gtk::HeaderBar header;
   };
 }
 #endif

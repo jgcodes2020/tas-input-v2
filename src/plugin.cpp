@@ -1,9 +1,10 @@
 #include "plugin.hpp"
 #include "glibmm/main.h"
 #include "glibmm/priorities.h"
+#include "gtkmm/box.h"
+#include "gtkmm/settings.h"
 #include "joystick.hpp"
 #include "main_window.hpp"
-#include "mupen64plus/m64p_types.h"
 #include "mupen_api.hpp"
 
 #include <atomic>
@@ -13,6 +14,8 @@
 #include <stdexcept>
 #include <string_view>
 #include <thread>
+
+#include <resources/css/main.css.rsrc.hpp>
 
 namespace {
   using debug_callback_t = void(void* data, int level, const char* msg);
@@ -51,6 +54,14 @@ M64P_EXPORT m64p_error PluginStartup(
   gtk_app = Gtk::Application::create("io.github.jgcodes2020.tasdi2");
   gtk_app->signal_activate().connect([]() {
     { tasdi2::Joystick(); }
+    
+    auto css_loader = Gtk::CssProvider::create();
+    css_loader->load_from_data(tasdi2::rsrc::css_data);
+
+    auto display = Gdk::Display::get_default();
+
+    Gtk::StyleContext::add_provider_for_display(
+      display, css_loader, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   });
 
   init_flag = true;
@@ -92,11 +103,11 @@ M64P_EXPORT int RomOpen() {
 }
 M64P_EXPORT void InitiateControllers(CONTROL_INFO info) {
   info.Controls[0].Present = true;
-  info.Controls[0].Plugin = PLUGIN_NONE;
+  info.Controls[0].Plugin  = PLUGIN_NONE;
 }
 M64P_EXPORT void GetKeys(int idx, BUTTONS* out) {
   using namespace std::literals;
-  
+
   if (idx != 0) {
     tasdi2::debug_log(
       M64MSG_ERROR, "This plugin is still in the works: it only supports P1.");
@@ -112,7 +123,8 @@ M64P_EXPORT void GetKeys(int idx, BUTTONS* out) {
       buttons_set = true;
       buttons_set.notify_one();
       return false;
-    }, Glib::PRIORITY_HIGH_IDLE);
+    },
+    Glib::PRIORITY_HIGH_IDLE);
   buttons_set.wait(false);
   out->Value = buttons;
 }
@@ -126,7 +138,7 @@ M64P_EXPORT void ReadController(int idx, unsigned char* cmd) {
   (void) 0;
 }
 M64P_EXPORT void RomClosed() {
-  get_main_window<tasdi2::MainWindow>().close();
+  gtk_window_destroy(get_main_window<tasdi2::MainWindow>().gobj());
 }
 
 M64P_EXPORT void SDL_KeyDown(int km, int ks) {}

@@ -19,11 +19,6 @@ namespace {
     cairo->move_to(x1, y1);
     cairo->line_to(x2, y2);
   }
-  
-  template <class T>
-  inline T clamp(T x, T min, T max) {
-    return std::max(min, std::min(max, x));
-  }
 }  // namespace
 
 namespace tasdi2 {
@@ -62,24 +57,38 @@ namespace tasdi2 {
       drag_x = x;
       drag_y = y;
       
-      prop_xpos.set_value(clamp(int(drag_x * 256 / get_width()) - 128, -128, 127));
-      prop_ypos.set_value(-clamp(int(drag_y * 256 / get_width()) - 128, -128, 127));
+      const int w = get_width();
+      const int h = get_height();
+      const int jx = std::clamp(int((x * 256 / w) - 128), -128, 127);
+      const int jy = std::clamp(int(((h - y) * 256 / h) - 128), -128, 127);
       
+      prop_xpos.set_value(jx);
+      prop_ypos.set_value(jy);
       set_cursor("closedhand");
     }, false);
     drag_gest->signal_drag_update().connect([&](double dx, double dy) {
       const double real_x = drag_x + dx;
       const double real_y = drag_y + dy;
       
-      prop_xpos.set_value(clamp(int(real_x * 256 / get_width()) - 128, -128, 127));
-      prop_ypos.set_value(-clamp(int(real_y * 256 / get_width()) - 128, -128, 127));
+      const int w = get_width();
+      const int h = get_height();
+      const int jx = std::clamp(int((real_x * 256 / w) - 128), -128, 127);
+      const int jy = std::clamp(int(((h - real_y) * 256 / h) - 128), -128, 127);
+      
+      prop_xpos.set_value(jx);
+      prop_ypos.set_value(jy);
     }, false);
     drag_gest->signal_drag_end().connect([&](double dx, double dy) {
       const double real_x = drag_x + dx;
       const double real_y = drag_y + dy;
       
-      prop_xpos.set_value(clamp(int(real_x * 256 / get_width()) - 128, -128, 127));
-      prop_ypos.set_value(-clamp(int(real_y * 256 / get_width()) - 128, -128, 127));
+      const int w = get_width();
+      const int h = get_height();
+      const int jx = std::clamp(int((real_x * 256 / w) - 128), -128, 127);
+      const int jy = std::clamp(int(((h - real_y) * 256 / h) - 128), -128, 127);
+      
+      prop_xpos.set_value(jx);
+      prop_ypos.set_value(jy);
       set_cursor("pointer");
     }, false);
   }
@@ -87,8 +96,8 @@ namespace tasdi2 {
   void Joystick::measure_vfunc(
     Gtk::Orientation orientation, int for_size, int& minimum, int& natural,
     int& minimum_baseline, int& natural_baseline) const {
-    minimum          = 128;
-    natural          = 160;
+    minimum          = 64;
+    natural          = 64;
     minimum_baseline = -1;
     natural_baseline = -1;
     return;

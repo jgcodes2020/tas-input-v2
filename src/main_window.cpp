@@ -1,5 +1,6 @@
 #include "main_window.hpp"
 #include "gtkmm/button.h"
+#include "gtkmm/headerbar.h"
 #include "joystick.hpp"
 
 #include <cairomm/cairomm.h>
@@ -10,15 +11,15 @@
 #include <cstdlib>
 #include <iostream>
 #include <numbers>
-#include "mupen64plus/m64p_plugin.h"
-#include <resources/css/main.css.rsrc.hpp>
+#include "mupen_api.hpp"
+
 #include <resources/ui/main.ui.rsrc.hpp>
 
 namespace tasdi2 {
   // MAIN WINDOW CLASS
   // ======================
   MainWindow::MainWindow() :
-    builder(Gtk::Builder::create_from_string(tasdi2::rsrc::ui_data)) {
+    builder(Gtk::Builder::create_from_string(tasdi2::rsrc::ui_data)), header() {
     // Setup UI
     set_title("TASInput");
     set_child(*builder->get_widget<Gtk::Box>("main-root"));
@@ -36,6 +37,8 @@ namespace tasdi2 {
     Glib::Binding::bind_property(
       jsfr_stick.property_ypos(), jsfr_spin_y.property_value(),
       Glib::Binding::Flags::BIDIRECTIONAL);
+
+    signal_close_request().connect([]() { return true; }, false);
   };
 
   BUTTONS MainWindow::retrieve_input(int idx) {
@@ -71,13 +74,13 @@ namespace tasdi2 {
       builder->get_widget<Gtk::ToggleButton>("btfr-btn-b")->get_active();
     res.START_BUTTON =
       builder->get_widget<Gtk::ToggleButton>("btfr-btn-start")->get_active();
-    
+
     auto& jsfr_stick = *Gtk::Builder::get_widget_derived<tasdi2::Joystick>(
       builder, "jsfr-stick");
-    
+
     res.X_AXIS = jsfr_stick.property_xpos().get_value();
     res.Y_AXIS = jsfr_stick.property_ypos().get_value();
-    
+
     return res;
   }
 }  // namespace tasdi2

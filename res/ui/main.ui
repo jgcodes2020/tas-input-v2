@@ -18,7 +18,6 @@
 
   <object class="GtkBox" id="main-root">
     <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
-    <property name="homogeneous">true</property>
     <property name="margin-start">10</property>
     <property name="margin-end">10</property>
     <property name="margin-top">10</property>
