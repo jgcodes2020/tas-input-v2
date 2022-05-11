@@ -59,8 +59,13 @@ namespace tasdi2 {
       
       const int w = get_width();
       const int h = get_height();
-      const int jx = std::clamp(int((x * 256 / w) - 128), -128, 127);
-      const int jy = std::clamp(int(((h - y) * 256 / h) - 128), -128, 127);
+      int jx = std::clamp(int((x * 256 / w) - 128), -128, 127);
+      int jy = std::clamp(int(((h - y) * 256 / h) - 128), -128, 127);
+      
+      if (-8 < jx && jx < 8)
+        jx = 0;
+      if (-8 < jy && jy < 8)
+        jy = 0;
       
       prop_xpos.set_value(jx);
       prop_ypos.set_value(jy);
@@ -72,8 +77,13 @@ namespace tasdi2 {
       
       const int w = get_width();
       const int h = get_height();
-      const int jx = std::clamp(int((real_x * 256 / w) - 128), -128, 127);
-      const int jy = std::clamp(int(((h - real_y) * 256 / h) - 128), -128, 127);
+      int jx = std::clamp(int((real_x * 256 / w) - 128), -128, 127);
+      int jy = std::clamp(int(((h - real_y) * 256 / h) - 128), -128, 127);
+      
+      if (-8 < jx && jx < 8)
+        jx = 0;
+      if (-8 < jy && jy < 8)
+        jy = 0;
       
       prop_xpos.set_value(jx);
       prop_ypos.set_value(jy);
@@ -84,8 +94,13 @@ namespace tasdi2 {
       
       const int w = get_width();
       const int h = get_height();
-      const int jx = std::clamp(int((real_x * 256 / w) - 128), -128, 127);
-      const int jy = std::clamp(int(((h - real_y) * 256 / h) - 128), -128, 127);
+      int jx = std::clamp(int((real_x * 256 / w) - 128), -128, 127);
+      int jy = std::clamp(int(((h - real_y) * 256 / h) - 128), -128, 127);
+      
+      if (-8 < jx && jx < 8)
+        jx = 0;
+      if (-8 < jy && jy < 8)
+        jy = 0;
       
       prop_xpos.set_value(jx);
       prop_ypos.set_value(jy);

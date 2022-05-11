@@ -19,7 +19,7 @@ namespace tasdi2 {
   // MAIN WINDOW CLASS
   // ======================
   MainWindow::MainWindow() :
-    builder(Gtk::Builder::create_from_string(tasdi2::rsrc::ui_data)), header() {
+    builder(Gtk::Builder::create_from_string(tasdi2::rsrc::ui_data)) {
     // Setup UI
     set_title("TASInput");
     set_child(*builder->get_widget<Gtk::Box>("main-root"));

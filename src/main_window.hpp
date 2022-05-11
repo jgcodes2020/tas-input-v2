@@ -15,7 +15,6 @@ namespace tasdi2 {
     BUTTONS retrieve_input(int idx);
   protected:
     Glib::RefPtr<Gtk::Builder> builder;
-    Gtk::HeaderBar header;
   };
 }
 #endif
