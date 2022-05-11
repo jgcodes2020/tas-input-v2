@@ -5,10 +5,10 @@ project(tas-input-v2
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
-# Just for fanciness
+# pkg-config folder
+list(APPEND "${PROJECT_SOURCE_DIR}/pc")
+# Local modules
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/cmake")
-
 # Make sure they're not dumb.
 include(PlatformChecks)
 

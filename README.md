@@ -6,16 +6,17 @@ While the UI is heavily inspired by the original TASInput, this project shares n
 
 ## Building instructions
 ### Linux
-Install your distribution's packages for gtkmm 4, along with cmake. Then, simply build like you would any other CMake project:
+Install your distribution's packages for GTKmm 4, along with cmake. Take note that Debian/Ubuntu do not offer GTKmm 4
+Then, simply build like you would any other CMake project:
 ```sh
 mkdir build && cd build
 cmake ..
 cmake --build .
 ```
-- Note: depending on your distribution, you may not have access to gtkmm 4 from the repositories. In this case, you'll need to build it from source, then make it available to pkg-config somehow. (This package uses pkg-config to find `gtkmm`.)
+**Note:** Distributions based on Debian/Ubuntu do not ship GTKmm 4 in their repositories. You'll need to build it from source, and setup a pkg-config file (either in the system or in `<project root>/pc`).
 
-### Windows
-[Install](https://www.msys2.org/#installation) MSYS2 and the MinGW toolchain. Then, open *MSYS2 MinGW x64* install gtkmm 4:
+### Windows (with MSYS)
+[Install](https://www.msys2.org/#installation) MSYS2 and the MinGW toolchain. Then, open *MSYS2 MinGW x64* and install gtkmm 4:
 ```sh
 # This may be slightly different, depending on which MSYS toolchain you use.
 pacman -S mingw-w64-x86_64-gtkmm-4.0
