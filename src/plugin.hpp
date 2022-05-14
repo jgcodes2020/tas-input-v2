@@ -30,4 +30,10 @@
 namespace tasdi2 {
   void debug_log(int log_level, const char* str);
 }
+
+#undef ERROR
+#undef IN
+#undef OUT
+#undef WINDING
+#undef IGNORE
 #endif

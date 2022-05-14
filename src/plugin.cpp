@@ -1,8 +1,5 @@
 #include "plugin.hpp"
-#include "glibmm/main.h"
-#include "glibmm/priorities.h"
-#include "gtkmm/box.h"
-#include "gtkmm/settings.h"
+#include <gtkmm.h>
 #include "joystick.hpp"
 #include "main_window.hpp"
 #include "mupen_api.hpp"
