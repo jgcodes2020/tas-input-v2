@@ -15,6 +15,8 @@ cmake --build .
 ```
 **Note:** Distributions based on Debian/Ubuntu do not ship GTKmm 4 in their repositories. You'll need to build it from source, and setup a pkg-config file (either in the system or in `<project root>/pc`).
 
+**Note 2:** If your distribution does not offer GTKmm 4, you may have luck with vcpkg.
+
 ### Windows under vcpkg (recommended for Windows)
 Install vcpkg if you haven't already.
 
