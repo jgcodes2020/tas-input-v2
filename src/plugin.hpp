@@ -31,6 +31,7 @@ namespace tasdi2 {
   void debug_log(int log_level, const char* str);
 }
 
+// Windows bad
 #undef ERROR
 #undef IN
 #undef OUT
