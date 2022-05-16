@@ -24,11 +24,24 @@ namespace tasdi2 {
     
     void snapshot_vfunc(const Glib::RefPtr<Gtk::Snapshot> &snapshot) override;
     
+    int get_xpos() const {
+      return prop_xpos.get_value();
+    }
+    void set_xpos(int x) {
+      prop_xpos.set_value(x);
+    }
     Glib::PropertyProxy<int> property_xpos() {
       return prop_xpos.get_proxy();
     }
     Glib::PropertyProxy_ReadOnly<int> property_xpos() const {
       return prop_xpos.get_proxy();
+    }
+    
+    int get_ypos() const {
+      return prop_ypos.get_value();
+    }
+    void set_ypos(int y) {
+      prop_ypos.set_value(y);
     }
     Glib::PropertyProxy<int> property_ypos() {
       return prop_ypos.get_proxy();

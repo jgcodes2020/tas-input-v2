@@ -34,7 +34,6 @@ cmake -D CMAKE_TOOLCHAIN_FILE=<vcpkg root>\scripts\buildsystems\vcpkg.cmake
 cmake --build .
 ```
 
-
 ### Windows under MSYS
 [Install](https://www.msys2.org/#installation) MSYS2 and the MinGW toolchain. Then, open *MSYS2 MinGW x64* and install gtkmm 4:
 ```sh

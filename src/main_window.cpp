@@ -78,8 +78,8 @@ namespace tasdi2 {
     auto& jsfr_stick = *Gtk::Builder::get_widget_derived<tasdi2::Joystick>(
       builder, "jsfr-stick");
 
-    res.X_AXIS = jsfr_stick.property_xpos().get_value();
-    res.Y_AXIS = jsfr_stick.property_ypos().get_value();
+    res.X_AXIS = jsfr_stick.get_xpos();
+    res.Y_AXIS = jsfr_stick.get_ypos();
 
     return res;
   }
