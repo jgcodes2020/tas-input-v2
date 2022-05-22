@@ -43,7 +43,7 @@ namespace tasdi2 {
 extern "C" {
 // CORE PLUGIN API
 // ===============
-M64P_EXPORT m64p_error PluginStartup(
+M64P_EXPORT m64p_error M64P_CALL PluginStartup(
   m64p_dynlib_handle dll, void* data, debug_callback_t* debug_callback) {
   mupen_debug   = debug_callback;
   debug_context = data;
@@ -64,14 +64,14 @@ M64P_EXPORT m64p_error PluginStartup(
   init_flag = true;
   return M64ERR_SUCCESS;
 }
-M64P_EXPORT m64p_error PluginShutdown() {
+M64P_EXPORT m64p_error M64P_CALL PluginShutdown() {
   // Shut down GTK
   gtk_app.reset();
 
   init_flag = false;
   return M64ERR_SUCCESS;
 }
-M64P_EXPORT m64p_error PluginGetVersion(
+M64P_EXPORT m64p_error M64P_CALL PluginGetVersion(
   m64p_plugin_type* type, int* version, int* api_version,
   const char** plugin_name, int* caps) {
   // Input plugin
@@ -92,24 +92,22 @@ M64P_EXPORT m64p_error PluginGetVersion(
   return M64ERR_SUCCESS;
 }
 
-M64P_EXPORT int RomOpen() {
+M64P_EXPORT int M64P_CALL RomOpen() {
   // Init GTK window
   gtk_thread = std::thread(
     []() { gtk_app->make_window_and_run<tasdi2::MainWindow>(0, nullptr); });
   return true;
 }
-M64P_EXPORT void InitiateControllers(CONTROL_INFO info) {
+M64P_EXPORT void M64P_CALL InitiateControllers(CONTROL_INFO info) {
   info.Controls[0].Present = true;
   info.Controls[0].Plugin  = PLUGIN_NONE;
 }
-M64P_EXPORT void GetKeys(int idx, BUTTONS* out) {
+M64P_EXPORT void M64P_CALL GetKeys(int idx, BUTTONS* out) {
   using namespace std::literals;
 
   if (idx != 0) {
-    tasdi2::debug_log(
-      M64MSG_ERROR, "This plugin is still in the works: it only supports P1.");
-    tasdi2::debug_log(M64MSG_ERROR, "Commencing self-destruction protocol...");
-    std::abort();
+    out->Value = 0;
+    return;
   }
   std::atomic<uint32_t> buttons = 0;
   std::atomic<bool> buttons_set = false;
@@ -125,19 +123,22 @@ M64P_EXPORT void GetKeys(int idx, BUTTONS* out) {
   buttons_set.wait(false);
   out->Value = buttons;
 }
-M64P_EXPORT void ControllerCommand(int idx, unsigned char* cmd) {
+M64P_EXPORT void M64P_CALL ControllerCommand(int idx, unsigned char* cmd) {
   // This function can be used to interact with controller addons.
   // SM64 doesn't use any of them, so we should be fine for testing.
   (void) 0;
 }
-M64P_EXPORT void ReadController(int idx, unsigned char* cmd) {
+M64P_EXPORT void M64P_CALL ReadController(int idx, unsigned char* cmd) {
   // This function is currently useless, but M64+ leaves it here for later.
   (void) 0;
 }
-M64P_EXPORT void RomClosed() {
+M64P_EXPORT void M64P_CALL RomClosed() {
   gtk_window_destroy(get_main_window<tasdi2::MainWindow>().gobj());
+  if (gtk_thread->joinable())
+    gtk_thread->join();
+  gtk_thread = std::nullopt;
 }
 
-M64P_EXPORT void SDL_KeyDown(int km, int ks) {}
-M64P_EXPORT void SDL_KeyUp(int km, int ks) {}
+M64P_EXPORT void M64P_CALL SDL_KeyDown(int km, int ks) {}
+M64P_EXPORT void M64P_CALL SDL_KeyUp(int km, int ks) {}
 }
