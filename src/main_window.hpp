@@ -12,7 +12,8 @@ namespace tasdi2 {
   public:
     MainWindow();
     
-    BUTTONS retrieve_input(int idx);
+    BUTTONS get_input();
+    void set_input(BUTTONS btns);
   protected:
     Glib::RefPtr<Gtk::Builder> builder;
   };

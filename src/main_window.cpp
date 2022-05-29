@@ -41,7 +41,7 @@ namespace tasdi2 {
     signal_close_request().connect([]() { return true; }, false);
   };
 
-  BUTTONS MainWindow::retrieve_input(int idx) {
+  BUTTONS MainWindow::get_input() {
     BUTTONS res;
     res.L_TRIG =
       builder->get_widget<Gtk::ToggleButton>("btfr-btn-l")->get_active();
@@ -82,6 +82,46 @@ namespace tasdi2 {
     res.Y_AXIS = jsfr_stick.get_ypos();
 
     return res;
+  }
+
+  void MainWindow::set_input(BUTTONS btns) {
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-l")
+      ->set_active(btns.L_TRIG);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-z")
+      ->set_active(btns.Z_TRIG);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-r")
+      ->set_active(btns.R_TRIG);
+
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-du")
+      ->set_active(btns.U_DPAD);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-dd")
+      ->set_active(btns.D_DPAD);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-dl")
+      ->set_active(btns.L_DPAD);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-dr")
+      ->set_active(btns.R_DPAD);
+
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-cu")
+      ->set_active(btns.U_CBUTTON);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-cd")
+      ->set_active(btns.D_CBUTTON);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-cl")
+      ->set_active(btns.L_CBUTTON);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-cr")
+      ->set_active(btns.R_CBUTTON);
+
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-a")
+      ->set_active(btns.A_BUTTON);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-b")
+      ->set_active(btns.B_BUTTON);
+    builder->get_widget<Gtk::ToggleButton>("btfr-btn-start")
+      ->set_active(btns.START_BUTTON);
+      
+    auto& jsfr_stick = *Gtk::Builder::get_widget_derived<tasdi2::Joystick>(
+      builder, "jsfr-stick");
+
+    jsfr_stick.set_xpos(btns.X_AXIS);
+    jsfr_stick.set_ypos(btns.Y_AXIS);
   }
 }  // namespace tasdi2
 

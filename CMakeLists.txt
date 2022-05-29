@@ -35,6 +35,8 @@ add_library(tasdi2 SHARED
   ${main.css}
   ${main.ui}
   "src/mupen_api.hpp"
+  "src/osal_dl.cpp"
+  "src/osal_dl.hpp"
 )
 target_include_directories(tasdi2 PRIVATE "${PROJECT_BINARY_DIR}/CMakeFiles/gen-include")
 target_link_libraries(tasdi2 PRIVATE pc::gtkmm-4.0)

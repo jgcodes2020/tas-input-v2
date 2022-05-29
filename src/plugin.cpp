@@ -2,7 +2,6 @@
 #include <gtkmm.h>
 #include "joystick.hpp"
 #include "main_window.hpp"
-#include "mupen_api.hpp"
 
 #include <atomic>
 #include <condition_variable>
@@ -12,6 +11,9 @@
 #include <string_view>
 #include <thread>
 
+#include "mupen64plus/m64p_types.h"
+#include "mupen64plus/m64p_vcr.h"
+#include "osal_dl.hpp"
 #include <resources/css/main.css.rsrc.hpp>
 
 namespace {
@@ -30,6 +32,9 @@ namespace {
   T& get_main_window() {
     return *static_cast<T*>(gtk_app->get_run_window());
   }
+
+  ptr_VCR_IsPlaying _VCR_IsPlaying;
+  ptr_VCR_GetKeys _VCR_GetKeys;
 }  // namespace
 namespace tasdi2 {
   void debug_log(int log_level, const char* out) {
@@ -51,7 +56,7 @@ M64P_EXPORT m64p_error M64P_CALL PluginStartup(
   gtk_app = Gtk::Application::create("io.github.jgcodes2020.tasdi2");
   gtk_app->signal_activate().connect([]() {
     { tasdi2::Joystick(); }
-    
+
     auto css_loader = Gtk::CssProvider::create();
     css_loader->load_from_data(tasdi2::rsrc::css_data);
 
@@ -60,6 +65,12 @@ M64P_EXPORT m64p_error M64P_CALL PluginStartup(
     Gtk::StyleContext::add_provider_for_display(
       display, css_loader, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   });
+
+  // Check if this core supports VCR
+  _VCR_IsPlaying =
+    reinterpret_cast<ptr_VCR_IsPlaying>(osal_dlsym(dll, "VCR_IsPlaying"));
+  _VCR_GetKeys =
+    reinterpret_cast<ptr_VCR_GetKeys>(osal_dlsym(dll, "VCR_GetKeys"));
 
   init_flag = true;
   return M64ERR_SUCCESS;
@@ -104,6 +115,8 @@ M64P_EXPORT void M64P_CALL InitiateControllers(CONTROL_INFO info) {
 }
 M64P_EXPORT void M64P_CALL GetKeys(int idx, BUTTONS* out) {
   using namespace std::literals;
+  
+  tasdi2::debug_log(M64MSG_INFO, "Input plugin polled");
 
   if (idx != 0) {
     out->Value = 0;
@@ -114,7 +127,7 @@ M64P_EXPORT void M64P_CALL GetKeys(int idx, BUTTONS* out) {
   // Grab button inputs
   Glib::signal_idle().connect(
     [&]() {
-      buttons = get_main_window<tasdi2::MainWindow>().retrieve_input(0).Value;
+      buttons     = get_main_window<tasdi2::MainWindow>().get_input().Value;
       buttons_set = true;
       buttons_set.notify_one();
       return false;
