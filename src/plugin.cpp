@@ -115,8 +115,6 @@ M64P_EXPORT void M64P_CALL InitiateControllers(CONTROL_INFO info) {
 }
 M64P_EXPORT void M64P_CALL GetKeys(int idx, BUTTONS* out) {
   using namespace std::literals;
-  
-  tasdi2::debug_log(M64MSG_INFO, "Input plugin polled");
 
   if (idx != 0) {
     out->Value = 0;
