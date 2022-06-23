@@ -1,3 +1,5 @@
+**THIS CODE HAS BEEN ARCHIVED. PLEASE USE [jgcodes2020/tas-input-qt](https://github.com/jgcodes2020/tas-input-qt).**
+
 # TASInput2
 
 This project is a Mupen64Plus input plugin that provides a GUI for precise joystick and button input.
